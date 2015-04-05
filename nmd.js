@@ -1,23 +1,42 @@
+Router.onBeforeAction(function() {
+  if (! Meteor.userId()) {
+    this.render('Login');
+  } else {
+    this.next();
+  }
+});
+
+Router.route('/', function () {
+  // render the Home template with a custom data context
+  this.render('Login');
+});
+
+// when you navigate to "/one" automatically render the template named "One".
+Router.route('/one');
+
+// when you navigate to "/two" automatically render the template named "Two".
+Router.route('/two');
+
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
-
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
+    // client
+  Meteor.subscribe("userData");
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+    // server
+    Meteor.publish("userData", function () {
+      if (this.userId) {
+        return Meteor.users.find({_id: this.userId},
+                                 {fields: {'other': 1, 'things': 1}});
+      } else {
+        this.ready();
+      }
+    });
+
+
   });
 }
+

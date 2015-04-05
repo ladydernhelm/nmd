@@ -1,14 +1,53 @@
+<!-- <head>
+  <title>New Months Day</title>
+</head>
+<body>
+	<template name="AppLayout">
+
+	  <h1>Set your goals for the month</h1>
+	  	{{> loginButtons}}
+
+	</template>
+</body>
+ -->
 <head>
-  <title>New Months DAy</title>
+  <title>New Months Day!</title>
 </head>
 
 <body>
-  <h1>Set your goals for the month</h1>
-
-  {{> hello}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="Login">
+
+  <h1>Set your goals for the month</h1>
+  {{> loginButtons}}
+
+</template>
+
+
+
+<template name="One">
+  {{> Nav}}
+
+  <h1>Page One</h1>
+</template>
+
+<template name="Two">
+  {{> Nav}}
+
+  <h1>Page Two</h1>
+</template>
+
+<template name="Nav">
+  <ul>
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/one">Page One</a>
+    </li>
+    <li>
+      <a href="/two">Page Two</a>
+    </li>
+  </ul>
 </template>
