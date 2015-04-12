@@ -1,53 +1,108 @@
-<!-- <head>
-  <title>New Months Day</title>
-</head>
-<body>
-	<template name="AppLayout">
-
-	  <h1>Set your goals for the month</h1>
-	  	{{> loginButtons}}
-
-	</template>
-</body>
- -->
 <head>
   <title>New Months Day!</title>
 </head>
 
-<body>
-</body>
+<template name="login">
 
-<template name="Login">
+  <h1>A place for celebrating life and setting meaningful goals</h1>
+  {{> loginButtons}}
+  {{> Nav}}
 
-  <h1>Set your goals for the month</h1>
+
+</template>
+
+<template name="/">
+  <h1>How did you get here?</h1>
+</template>
+
+<template name="goals">
+  {{> Nav}}
   {{> loginButtons}}
 
+  <h1>Welcome</h1>
+      <ul>
+      {{#each goal}}
+        {{> goal}}
+      {{/each}}
+    </ul>
+
+  <h2>View goals from previous months:</h2>
+    <body>
+      <div class="container">
+        <header>
+          <h1>Your goals for this month:</h1>
+
+          {{#if currentUser}}
+            <form class="new-goal">
+              <input type="text" name="text" placeholder="Type to add new goals" />
+            </form>
+          {{/if}}
+        </header>
+
+        <ul>
+          {{#each goal}}
+            {{> goal}}
+          {{/each}}
+        </ul>
+      </div>
+    </body>
 </template>
 
-
-
-<template name="One">
+<template name="events">
   {{> Nav}}
+  {{> loginButtons}}
 
-  <h1>Page One</h1>
-</template>
+  <h1>Upcoming NMD events:</h1>
+    <ul>
+    </ul>
 
-<template name="Two">
+  <h2>Previous events:</h2>
+    <ul>
+    </ul>
+  </template>
+
+  <template name="about">
   {{> Nav}}
+  {{> loginButtons}}
 
-  <h1>Page Two</h1>
+  <h1>About NMD</h1>
+  
+  </template>
+
+
+
+<template name="goalList">
+  <li class="{{#if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+<!--     {{#if isOwner}}
+      <button class="toggle-private">
+        {{#if private}}
+          Private    
+        {{else}}
+          Public
+        {{/if}}
+      </button>
+    {{/if}} 
+  -->
+
+    <!-- <span class="text"><strong>{{username}}</strong> - {{text}}</span> -->
+  </li>
 </template>
+
 
 <template name="Nav">
   <ul>
     <li>
-      <a href="/">Home</a>
+      <a href="/goals">goals</a>
     </li>
     <li>
-      <a href="/one">Page One</a>
+      <a href="/events">Events</a>
     </li>
     <li>
-      <a href="/two">Page Two</a>
+      <a href="/about">About</a>
     </li>
   </ul>
 </template>
