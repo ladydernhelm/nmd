@@ -4,6 +4,10 @@ below is mostly routing code from sample 1/2/3 routing app I found
 
 goals = new Mongo.Collection("goals");
 
+
+
+//would like to get email AND username :)
+
 Router.onBeforeAction(function() {
   if (! Meteor.userId()) {
     this.render('login');
@@ -17,14 +21,8 @@ Router.route('/', function () {
   
 });
 
-//want to send users to goals once they log in... will have to figure that out...
-
-Router.route('/goals');
-
-// when you navigate to "/one" automatically render the template named "One".
+Router.route('/goalspage');
 Router.route('/events');
-
-// when you navigate to "/two" automatically render the template named "Two".
 Router.route('/about');
 
 
@@ -37,19 +35,19 @@ if (Meteor.isClient) {
 
   Template.body.helpers({
     goals: function () {
-      if (Session.get("hideCompleted")) {
-        // If hide completed is checked, filter tasks
-        return goals.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-      } else {
-        // Otherwise, return all of the tasks
-        return goals.find({}, {sort: {createdAt: -1}});
-      }
-    },
-    hideCompleted: function () {
-      return Session.get("hideCompleted");
-    },
-    incompleteCount: function () {
-      return goals.find({checked: {$ne: true}}).count();
+  //     if (Session.get("hideCompleted")) {
+  //       // If hide completed is checked, filter tasks
+  //       return goals.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+  //     } else {
+  //       // Otherwise, return all of the tasks
+  //       return goals.find({}, {sort: {createdAt: -1}});
+  //     }
+  //   },
+  //   hideCompleted: function () {
+  //     return Session.get("hideCompleted");
+  //   },
+  //   incompleteCount: function () {
+  //     return goals.find({checked: {$ne: true}}).count();
     }
   });
 
@@ -66,12 +64,13 @@ if (Meteor.isClient) {
       // Prevent default form submit
       return false;
     },
+    //don't really know what this does....
     "change .hide-completed input": function (event) {
       Session.set("hideCompleted", event.target.checked);
     }
   });
 
-  Template.goals.events({
+  Template.goal.events({
     "click .toggle-checked": function () {
       // Set the checked property to the opposite of its current value
       Meteor.call("setChecked", this._id, ! this.checked);
@@ -79,9 +78,9 @@ if (Meteor.isClient) {
     "click .delete": function () {
       Meteor.call("deleteGoal", this._id);
     },
-    "click .toggle-private": function () {
-      Meteor.call("setPrivate", this._id, ! this.private);
-    }
+    // "click .toggle-private": function () {
+    //   Meteor.call("setPrivate", this._id, ! this.private);
+    // }
   });
 
   Template.goal.helpers({
@@ -105,66 +104,79 @@ below is server code from metoer todos demo
 
 
 Meteor.methods({
-  addTask: function (text) {
-    // Make sure the user is logged in before inserting a task
-    if (! Meteor.userId()) {
-      throw new Meteor.Error("not-authorized");
-    }
+  addGoal: function (text) {
 
-    Tasks.insert({
+
+    goals.insert({
       text: text,
       createdAt: new Date(),
       owner: Meteor.userId(),
-      username: Meteor.user().username
+      // username: Meteor.user().username
     });
   },
-  deleteTask: function (taskId) {
-    var task = Tasks.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
+  deleteGoal: function (goalId) {
+    var goal = goals.findOne(goalId);
+    if (goal.private && goal.owner !== Meteor.userId()) {
       // If the task is private, make sure only the owner can delete it
       throw new Meteor.Error("not-authorized");
     }
 
-    Tasks.remove(taskId);
+    goals.remove(goalId);
   },
-  setChecked: function (taskId, setChecked) {
-    var task = Tasks.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
+  setChecked: function (goalId, setChecked) {
+    var goal = goals.findOne(goalId);
+    if (goal.private && goal.owner !== Meteor.userId()) {
       // If the task is private, make sure only the owner can check it off
       throw new Meteor.Error("not-authorized");
     }
 
-    Tasks.update(taskId, { $set: { checked: setChecked} });
+    goals.update(goalId, { $set: { checked: setChecked} });
   },
-  setPrivate: function (taskId, setToPrivate) {
-    var task = Tasks.findOne(taskId);
+  // setPrivate: function (goalId, setToPrivate) {
+  //   var goal = goals.findOne(goalId);
 
-    // Make sure only the task owner can make a task private
-    if (task.owner !== Meteor.userId()) {
-      throw new Meteor.Error("not-authorized");
-    }
+  //   // Make sure only the task owner can make a task private
+  //   if (goal.owner !== Meteor.userId()) {
+  //     throw new Meteor.Error("not-authorized");
+  //   }
 
-    Tasks.update(taskId, { $set: { private: setToPrivate } });
-  }
+  //   goals.update(goalId, { $set: { private: setToPrivate } });
+  // }
 });
 
+// if (Meteor.isServer) {
+//   // Only publish tasks that are public or belong to the current user
+//   Meteor.publish("goals", function () {
+//     return goals.find({
+//       $or: [
+//         { private: {$ne: true} },
+//         { owner: this.userId }
+//       ]
+//     });
+//   });
+// }
+
+
+/*************************************
+below is my mix of server code from sample 1/2/3 routing & todos
+*************************************/
+
+
+
+
 if (Meteor.isServer) {
-  // Only publish tasks that are public or belong to the current user
-  Meteor.publish("tasks", function () {
-    return Tasks.find({
-      $or: [
-        { private: {$ne: true} },
-        { owner: this.userId }
-      ]
+  Meteor.startup(function () {
+    // code to run on server at startup
+    // server
+    Meteor.publish("goals", function () {
+        return goals.find({}, {fields: {text: 1}});
     });
   });
 }
 
+console.log(goals);
 
-
-
-
-
+console.log(goals.find({},{fields: {text:1}}));
 
 
 
@@ -177,27 +189,20 @@ below is server code from sample 1/2/3 routing app I found
 
 
 
-
-if (Meteor.isClient) {
-
-    // client
-  Meteor.subscribe("userData");
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-    // server
-    Meteor.publish("userData", function () {
-      if (this.userId) {
-        return Meteor.users.find({_id: this.userId},
-                                 {fields: {'other': 1, 'things': 1}});
-      } else {
-        this.ready();
-      }
-    });
+// if (Meteor.isServer) {
+//   Meteor.startup(function () {
+//     // code to run on server at startup
+//     // server
+//     Meteor.publish("userData", function () {
+//       if (this.userId) {
+//         return Meteor.users.find({_id: this.userId},
+//                                  {fields: {'other': 1, 'things': 1}});
+//       } else {
+//         this.ready();
+//       }
+//     });
 
 
-  });
-}
+//   });
+// }
 

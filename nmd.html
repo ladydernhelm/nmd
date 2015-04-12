@@ -15,7 +15,7 @@
   <h1>How did you get here?</h1>
 </template>
 
-<template name="goals">
+<template name="goalspage">
   {{> Nav}}
   {{> loginButtons}}
 
@@ -27,17 +27,20 @@
     </ul>
 
   <h2>View goals from previous months:</h2>
+
+
+
     <body>
       <div class="container">
-        <header>
+
           <h1>Your goals for this month:</h1>
 
-          {{#if currentUser}}
+          <!-- {{#if currentUser}} -->
             <form class="new-goal">
               <input type="text" name="text" placeholder="Type to add new goals" />
             </form>
-          {{/if}}
-        </header>
+<!--           {{/if}}
+ -->
 
         <ul>
           {{#each goal}}
@@ -71,7 +74,7 @@
 
 
 
-<template name="goalList">
+<template name="goal">
   <li class="{{#if checked}}checked{{/if}}">
     <button class="delete">&times;</button>
 
@@ -96,7 +99,7 @@
 <template name="Nav">
   <ul>
     <li>
-      <a href="/goals">goals</a>
+      <a href="/goalspage">goals</a>
     </li>
     <li>
       <a href="/events">Events</a>
