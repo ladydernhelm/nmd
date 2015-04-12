@@ -4,7 +4,9 @@ below is mostly routing code from sample 1/2/3 routing app I found
 
 goals = new Mongo.Collection("goals");
 
-
+if (Meteor.isClient) {
+  // This code only runs on the client
+  Meteor.subscribe("goals");
 
 //would like to get email AND username :)
 
@@ -29,27 +31,27 @@ Router.route('/about');
 /*************************************
 below is client code from metoer todo demos
 *************************************/
-if (Meteor.isClient) {
-  // This code only runs on the client
-  Meteor.subscribe("goals");
+// if (Meteor.isClient) {
+//   // This code only runs on the client
+//   Meteor.subscribe("goals");
 
-  Template.body.helpers({
-    goals: function () {
-  //     if (Session.get("hideCompleted")) {
-  //       // If hide completed is checked, filter tasks
-  //       return goals.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-  //     } else {
-  //       // Otherwise, return all of the tasks
-  //       return goals.find({}, {sort: {createdAt: -1}});
-  //     }
-  //   },
-  //   hideCompleted: function () {
-  //     return Session.get("hideCompleted");
-  //   },
-  //   incompleteCount: function () {
-  //     return goals.find({checked: {$ne: true}}).count();
-    }
-  });
+  // Template.body.helpers({
+  //   goals: function () {
+  // //     if (Session.get("hideCompleted")) {
+  // //       // If hide completed is checked, filter tasks
+  // //       return goals.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+  // //     } else {
+  // //       // Otherwise, return all of the tasks
+  // //       return goals.find({}, {sort: {createdAt: -1}});
+  // //     }
+  // //   },
+  // //   hideCompleted: function () {
+  // //     return Session.get("hideCompleted");
+  // //   },
+  // //   incompleteCount: function () {
+  // //     return goals.find({checked: {$ne: true}}).count();
+  //   }
+  // });
 
   Template.body.events({
     "submit .new-goal": function (event) {
@@ -65,9 +67,9 @@ if (Meteor.isClient) {
       return false;
     },
     //don't really know what this does....
-    "change .hide-completed input": function (event) {
-      Session.set("hideCompleted", event.target.checked);
-    }
+    // "change .hide-completed input": function (event) {
+    //   Session.set("hideCompleted", event.target.checked);
+    // }
   });
 
   Template.goal.events({
@@ -106,11 +108,15 @@ below is server code from metoer todos demo
 Meteor.methods({
   addGoal: function (text) {
 
+    // if (! Meteor.userId()) {
+    //   throw new Meteor.Error("not-authorized");
+    // }
 
     goals.insert({
       text: text,
-      createdAt: new Date(),
-      owner: Meteor.userId(),
+      createdAt: new Date()
+
+      // owner: Meteor.userId(),
       // username: Meteor.user().username
     });
   },
@@ -169,12 +175,12 @@ if (Meteor.isServer) {
     // code to run on server at startup
     // server
     Meteor.publish("goals", function () {
-        return goals.find({}, {fields: {text: 1}});
+        return goals.find();
     });
   });
 }
 
-console.log(goals);
+console.log(goals.find().count());
 
 console.log(goals.find({},{fields: {text:1}}));
 
