@@ -1,14 +1,11 @@
-/*************************************
-below is mostly routing code from sample 1/2/3 routing app I found
-*************************************/
-
 goals = new Mongo.Collection("goals");
-
-if (Meteor.isClient) {
-  // This code only runs on the client
-  Meteor.subscribe("goals");
-
-//would like to get email AND username :)
+// goals.attachSchema(new SimpleSchema({
+//   title: {
+//     type: String,
+//     label: "Title",
+//     max: 200
+//   }
+// }));
 
 Router.onBeforeAction(function() {
   if (! Meteor.userId()) {
@@ -18,40 +15,18 @@ Router.onBeforeAction(function() {
   }
 });
 
-Router.route('/', function () {
-  // render the Home template with a custom data context
-  
-});
+  Router.route('/', function () {
+    // render the Home template with a custom data context
+    
+  });
 
-Router.route('/goalspage');
-Router.route('/events');
-Router.route('/about');
+  Router.route('/goalspage');
+  Router.route('/events');
+  Router.route('/about');
 
-
-/*************************************
-below is client code from metoer todo demos
-*************************************/
-// if (Meteor.isClient) {
-//   // This code only runs on the client
-//   Meteor.subscribe("goals");
-
-  // Template.body.helpers({
-  //   goals: function () {
-  // //     if (Session.get("hideCompleted")) {
-  // //       // If hide completed is checked, filter tasks
-  // //       return goals.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-  // //     } else {
-  // //       // Otherwise, return all of the tasks
-  // //       return goals.find({}, {sort: {createdAt: -1}});
-  // //     }
-  // //   },
-  // //   hideCompleted: function () {
-  // //     return Session.get("hideCompleted");
-  // //   },
-  // //   incompleteCount: function () {
-  // //     return goals.find({checked: {$ne: true}}).count();
-  //   }
-  // });
+if (Meteor.isClient) {
+  // This code only runs on the client
+  Meteor.subscribe("goals");
 
   Template.body.events({
     "submit .new-goal": function (event) {
@@ -65,36 +40,40 @@ below is client code from metoer todo demos
 
       // Prevent default form submit
       return false;
-    },
+    }
     //don't really know what this does....
     // "change .hide-completed input": function (event) {
     //   Session.set("hideCompleted", event.target.checked);
     // }
   });
 
-  Template.goal.events({
+
+  Template.goalspage.events({
     "click .toggle-checked": function () {
       // Set the checked property to the opposite of its current value
       Meteor.call("setChecked", this._id, ! this.checked);
     },
     "click .delete": function () {
       Meteor.call("deleteGoal", this._id);
-    },
+    }
     // "click .toggle-private": function () {
     //   Meteor.call("setPrivate", this._id, ! this.private);
     // }
   });
 
-  Template.goal.helpers({
+  Template.goalspage.helpers({
     isOwner: function () {
       return this.owner === Meteor.userId();
     }
   });
-
 }
 
-
-
+  Template.goalspage.helpers({
+    isOwner: function () {
+      return this.owner === Meteor.userId();
+    }
+  });
+}
 
 /*************************************
 below is server code from metoer todos demo
@@ -171,28 +150,57 @@ below is my mix of server code from sample 1/2/3 routing & todos
 
 
 if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-    // server
-    Meteor.publish("goals", function () {
-        return goals.find();
-    });
+Meteor.startup(function () {
+  // code to run on server at startup
+  // server
+  Meteor.publish("goals", function () {
+      return goals.find();
   });
+});
 }
 
-console.log(goals.find().count());
 
-console.log(goals.find({},{fields: {text:1}}));
+
+// if (Meteor.isServer) {
+//   goals.allow({
+//     insert: function (userId, doc) {
+//       // the user must be logged in, and the document must be owned by the user
+//       return (userId && doc.owner === userId);
+//     },
+//     update: function (userId, doc, fields, modifier) {
+//       // can only change your own documents
+//       return doc.owner === userId;
+//     },
+//     remove: function (userId, doc) {
+//       // can only remove your own documents
+//       return doc.owner === userId;
+//     },
+//     fetch: ['owner']
+//   });
+
+//   goals.deny({
+//     update: function (userId, docs, fields, modifier) {
+//       // can't change owners
+//       return _.contains(fields, 'owner');
+//     },
+//     remove: function (userId, doc) {
+//       // can't remove locked documents
+//       return doc.locked;
+//     },
+//     fetch: ['locked'] // no need to fetch 'owner'
+//   });
+// }
+
+// console.log(goals.find().count());
+
+
+// console.log(goals.find({},{fields: {text:1}}));
 
 
 
 /*************************************
 below is server code from sample 1/2/3 routing app I found
 *************************************/
-
-
-
-
 
 
 // if (Meteor.isServer) {
@@ -211,4 +219,3 @@ below is server code from sample 1/2/3 routing app I found
 
 //   });
 // }
-

@@ -9,3 +9,6 @@ accounts-ui
 accounts-password
 accounts-base
 iron:router
+http
+aldeed:autoform
+aldeed:collection2
