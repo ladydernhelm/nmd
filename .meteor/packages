@@ -12,3 +12,5 @@ iron:router
 http
 aldeed:autoform
 aldeed:collection2
+jquery-ui
+bootstrap
