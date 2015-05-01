@@ -1,21 +1,23 @@
-Router.configure({
-	layoutTemplate: "layout"
+Router.route('/', function () {
+  this.render('home');
+});
+
+Router.route('/about', function () {
+  this.render('about');
+});
+
+Router.route('/events', function () {
+  this.render('events');
+});
+
+Router.route('/goals', function () {
+  this.render('login');
+});
+
+Router.route('/goals/:_id', function () {
+    UserId = this.params._id
+  var goals = Goals.findOne({_id: this.params._id});
+  this.render('goals', {data: goals});
 });
 
 
-Router.map(function(){
-	this.route("home", {path: "/"});
-	this.route("events", {path: "/events"});
-	this.route("about", {path: "/about"});
-    this.route("goals", {path: "/goals"//,
-
-    // onBeforeAction: function (pause) {
-    //   if (!Meteor.user()) {
-    //     // render the login template but keep the url in the browser the same
-    //     this.render("login");
-    //     // pause the rest of the before hooks and the action function 
-    //     // pause();
-    //   }
-   // },
-  });
-});

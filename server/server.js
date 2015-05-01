@@ -1,7 +1,9 @@
 if (Meteor.isServer) {
 	Meteor.publish("goals", function () {
-		return Goals.find();
+		return Goals.find({});
 	});
+
+  //process.env.MAIL_URL = MAIL GUN URL
 }
 
 Meteor.methods({

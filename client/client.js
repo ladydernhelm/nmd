@@ -19,7 +19,7 @@ if (Meteor.isClient) {
 
 	Template.goals.helpers({
 		goals: function () {
-			return Goals.find({}, {sort: {createdAt: -1}});
+			return Goals.find({'owner':UserId}, {sort: {createdAt: -1}});
 		}
 	});
 }

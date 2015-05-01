@@ -1,3 +1,10 @@
 <template name="login">
+Please log in to continue.
 {{> loginButtons}}
+
+{{#if currentUser}}
+<script>
+Router.go('/goals/'+Meteor.user()._id)
+</script>
+{{/if}}
 </template>
