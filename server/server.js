@@ -20,4 +20,9 @@ Meteor.methods({
       username: Meteor.user().username
     });
   },
+  setChecked: function (goalId, setChecked) {
+    var goal = Goals.findOne(goalId);
+
+    Goals.update(goalId, {$set: { checked: setChecked} });
+  }
 })

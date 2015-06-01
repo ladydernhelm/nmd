@@ -1,17 +1,15 @@
 <template name="goals">
 	<div>
 		<h2>Current month</h2>
-			{{#if currentUser}}
-				<form class="new-goal">
-					<input type="text" name="text" placeholder="Type to add new goal" />
-					<input type="submit" value="Add Goal">
-				</form>
-			{{/if}}
-
-		    <ul>
-		      {{#each goals}}
-		        {{> goalitem}}
-		      {{/each}}
-		    </ul>
+		<p>Set your goals, mark your progress!</p>
+		<form class="new-goal">
+			<input type="text" name="text" placeholder="Type to add new goal" />
+			<input type="submit" value="Add Goal"/>
+		</form>
+		<ul>
+		{{#each goals}}
+			{{> goalitem}}
+		{{/each}}
+		</ul>
 	</div>
 </template>

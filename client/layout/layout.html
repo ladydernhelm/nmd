@@ -1,10 +1,29 @@
 <head>
-  <title>New Months Day!</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Months Day!</title>
 </head>
 
-<body>
-		{{> nav}}
+<body class=" grey lighten-4">
+	<nav class="cyan">
+		<div class="nav-wrapper cyan container">
+			<span class="brand-logo">NMD</span>
+			<ul class="right hide-on-med-and-down">
+			  <li><a href="/">Home</a></li>
+			  <li><a href="/goals/{{currentUser._id}}">Goals</a></li>
+			  <li><a href="{{pathFor 'events'}}">Events</a></li>
+			  <li><a href="{{pathFor 'about'}}">About</a></li>
+			</ul>
+			<ul id="slide-out" class="side-nav">
+			  <li>{{> loginButtons}}</li>
+			  <li><a href="/">Home</a></li>
+			  <li><a href="/goals/{{currentUser._id}}">Goals</a></li>
+			  <li><a href="{{pathFor 'events'}}">Events</a></li>
+			  <li><a href="{{pathFor 'about'}}">About</a></li>
+
+			</ul>
+			<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+		</div>
+	</nav>
 </body>
 
 <template name="layout">

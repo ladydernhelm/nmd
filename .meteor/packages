@@ -14,3 +14,6 @@ aldeed:autoform
 aldeed:collection2
 jquery-ui
 bootstrap
+materialize:materialize
+useraccounts:materialize
+useraccounts:core

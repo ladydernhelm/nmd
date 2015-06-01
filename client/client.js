@@ -4,6 +4,11 @@ if (Meteor.isClient) {
 	Meteor.subscribe("goals");
 	
 	Template.goals.events({
+		"click .toggle-checked": function () {
+			// Set the checked property to the opposite of its current value
+			Meteor.call("setChecked", this._id, ! this.checked);
+		},
+		
 		"submit form": function (event) {
 			event.preventDefault();
 			// This function is called when the new task form is submitted
@@ -21,6 +26,10 @@ if (Meteor.isClient) {
 		goals: function () {
 			return Goals.find({'owner':UserId}, {sort: {createdAt: -1}});
 		}
+	});
+
+	$( document ).ready(function() {
+	    $(".button-collapse").sideNav();
 	});
 }
 
